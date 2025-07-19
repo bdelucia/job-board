@@ -9,7 +9,10 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 import { createdAt, id, updatedAt } from "../schemaHelpers";
-import { OrganizationTables } from "./organizations";
+import { OrganizationTable } from "./organizations";
+import { relDuration } from "drizzle-orm/gel-core";
+import { JobListingApplicationTable } from "./jobListingApplication";
+import { relations } from "drizzle-orm";
 
 export const wageIntervals = ["hourly", "yearly"] as const;
 export type WageInterval = (typeof wageIntervals)[number];
@@ -52,7 +55,7 @@ export const JobListingTable = pgTable(
   {
     id,
     organizationId: varchar()
-      .references(() => OrganizationTables.id, { onDelete: "cascade" })
+      .references(() => OrganizationTable.id, { onDelete: "cascade" })
       .notNull(),
     title: varchar().notNull(),
     description: text().notNull(),
@@ -70,4 +73,15 @@ export const JobListingTable = pgTable(
     updatedAt,
   },
   (table) => [index().on(table.stateAbbreviation)]
+);
+
+export const jobListingReferences = relations(
+  JobListingTable,
+  ({ one, many }) => ({
+    organization: one(OrganizationTable, {
+      fields: [JobListingTable.organizationId],
+      references: [OrganizationTable.id],
+    }),
+    applications: many(JobListingApplicationTable),
+  })
 );

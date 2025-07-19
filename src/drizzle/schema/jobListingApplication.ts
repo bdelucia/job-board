@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import { createdAt, updatedAt } from "../schemaHelpers";
 import { JobListingTable } from "./jobListing";
 import { UserTable } from "./user";
@@ -40,4 +41,18 @@ export const JobListingApplicationTable = pgTable(
     updatedAt,
   },
   (table) => [primaryKey({ columns: [table.jobListingId, table.userId] })]
+);
+
+export const jobListingApplicationRelations = relations(
+  JobListingApplicationTable,
+  ({ one }) => ({
+    jobListing: one(JobListingTable, {
+      fields: [JobListingApplicationTable.jobListingId],
+      references: [JobListingTable.id],
+    }),
+    user: one(UserTable, {
+      fields: [JobListingApplicationTable.userId],
+      references: [UserTable.id],
+    }),
+  })
 );
