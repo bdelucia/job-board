@@ -1,17 +1,29 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+## Getting Started (for devs)
 
 First, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```
+
+Then run the inngest server:
+
+```bash
+npm run inngest
+```
+
+Then run the docker db server:
+
+```bash
+sudo docker-compose up
+```
+
+(Optional) Run the drizzle studio to see the PostgreSQL database:
+
+```bash
+npm run db:studio
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
