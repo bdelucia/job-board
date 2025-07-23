@@ -7,48 +7,44 @@ import {
   text,
   timestamp,
   varchar,
-} from "drizzle-orm/pg-core";
-import { createdAt, id, updatedAt } from "../schemaHelpers";
-import { OrganizationTable } from "./organizations";
-import { relDuration } from "drizzle-orm/gel-core";
-import { JobListingApplicationTable } from "./jobListingApplication";
-import { relations } from "drizzle-orm";
+} from "drizzle-orm/pg-core"
+import { createdAt, id, updatedAt } from "../schemaHelpers"
+import { OrganizationTable } from "./organizations"
+import { relDuration } from "drizzle-orm/gel-core"
+import { JobListingApplicationTable } from "./jobListingApplication"
+import { relations } from "drizzle-orm"
 
-export const wageIntervals = ["hourly", "yearly"] as const;
-export type WageInterval = (typeof wageIntervals)[number];
+export const wageIntervals = ["hourly", "yearly"] as const
+export type WageInterval = (typeof wageIntervals)[number]
 export const wageIntervalEnum = pgEnum(
   "job_listings_wage_interval",
   wageIntervals
-);
+)
 
-export const locationRequirements = ["in-office", "hybrid", "remote"] as const;
-export type locationRequirement = (typeof locationRequirements)[number];
+export const locationRequirements = ["in-office", "hybrid", "remote"] as const
+export type locationRequirement = (typeof locationRequirements)[number]
 export const locationRequirementEnum = pgEnum(
   "job_listings_location_requirement",
   locationRequirements
-);
+)
 
-export const experienceLevels = ["junior", "mid-level", "senior"] as const;
-export type ExperienceLevel = (typeof experienceLevels)[number];
+export const experienceLevels = ["junior", "mid_level", "senior"] as const
+export type ExperienceLevel = (typeof experienceLevels)[number]
 export const experienceLevelEnum = pgEnum(
   "job_listings_experience_level",
   experienceLevels
-);
+)
 
-export const jobListingStatuses = ["draft", "published", "delisted"] as const;
-export type JobListingStatus = (typeof jobListingStatuses)[number];
+export const jobListingStatuses = ["draft", "published", "delisted"] as const
+export type JobListingStatus = (typeof jobListingStatuses)[number]
 export const jobListingStatusEnum = pgEnum(
   "job_listings_status",
   jobListingStatuses
-);
+)
 
-export const jobListingTypes = [
-  "internship",
-  "part-time",
-  "full-time",
-] as const;
-export type JobListingType = (typeof jobListingTypes)[number];
-export const jobListingTypeEnum = pgEnum("job_listing_type", jobListingTypes);
+export const jobListingTypes = ["internship", "part-time", "full-time"] as const
+export type JobListingType = (typeof jobListingTypes)[number]
+export const jobListingTypeEnum = pgEnum("job_listing_type", jobListingTypes)
 
 export const JobListingTable = pgTable(
   "job_listings",
@@ -73,7 +69,7 @@ export const JobListingTable = pgTable(
     updatedAt,
   },
   (table) => [index().on(table.stateAbbreviation)]
-);
+)
 
 export const jobListingReferences = relations(
   JobListingTable,
@@ -84,4 +80,4 @@ export const jobListingReferences = relations(
     }),
     applications: many(JobListingApplicationTable),
   })
-);
+)
