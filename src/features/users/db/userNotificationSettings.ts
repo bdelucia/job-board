@@ -1,5 +1,6 @@
-import { db } from "@/drizzle/db";
-import { UserNotificationsSettingsTable, UserTable } from "@/drizzle/schema";
+import { db } from "@/drizzle/db"
+import { UserNotificationsSettingsTable } from "@/drizzle/schema"
+import { revalidateUserNotificationSettingsCache } from "./cache/userNotificationSettings"
 
 export async function insertUserNotificationSettings(
   settings: typeof UserNotificationsSettingsTable.$inferInsert
@@ -7,5 +8,7 @@ export async function insertUserNotificationSettings(
   await db
     .insert(UserNotificationsSettingsTable)
     .values(settings)
-    .onConflictDoNothing();
+    .onConflictDoNothing()
+
+  revalidateUserNotificationSettingsCache(settings.userId)
 }
