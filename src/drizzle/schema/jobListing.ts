@@ -28,7 +28,7 @@ export const locationRequirementEnum = pgEnum(
   locationRequirements
 )
 
-export const experienceLevels = ["junior", "mid_level", "senior"] as const
+export const experienceLevels = ["junior", "mid-level", "senior"] as const
 export type ExperienceLevel = (typeof experienceLevels)[number]
 export const experienceLevelEnum = pgEnum(
   "job_listings_experience_level",
