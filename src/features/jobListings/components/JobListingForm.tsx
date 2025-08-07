@@ -116,7 +116,7 @@ export function JobListingForm({
                   <FormControl>
                     <Input
                       {...field}
-                      typeof="number"
+                      type="number"
                       value={field.value ?? ""}
                       className="rounded-r-none"
                       onChange={(e) =>
