@@ -11,14 +11,12 @@ import {
 } from "@/components/ui/popover"
 import { db } from "@/drizzle/db"
 import { JobListingStatus, JobListingTable } from "@/drizzle/schema"
+import { toggleJobListingStatus } from "@/features/jobListings/actions/actions"
 import { JobListingBadges } from "@/features/jobListings/components/JobListingBadges"
 import { getJobListingIdTag } from "@/features/jobListings/db/cache/jobListings"
 import { formatJobListingStatus } from "@/features/jobListings/lib/formatters"
-import { hasReachedMaxFeaturedJobListings } from "@/features/jobListings/lib/planFeatureHelpers"
-import {
-  getJobListingStatus,
-  getNextJobListingStatus,
-} from "@/features/jobListings/lib/utils"
+import { hasReachedMaxPublishedJobListings } from "@/features/jobListings/lib/planFeatureHelpers"
+import { getNextJobListingStatus } from "@/features/jobListings/lib/utils"
 import { getCurrentOrganization } from "@/services/clerk/lib/getCurrentAuth"
 import { hasOrgUserPermission } from "@/services/clerk/lib/orgUserPermissions"
 import { and, eq } from "drizzle-orm"
@@ -70,7 +68,7 @@ async function SuspendedPage({ params }: Props) {
               </Link>
             </Button>
           </AsyncIf>
-          <StatusUpdateButton status={jobListing.status} />
+          <StatusUpdateButton status={jobListing.status} id={jobListing.id} />
         </div>
       </div>
 
@@ -88,7 +86,13 @@ async function SuspendedPage({ params }: Props) {
   )
 }
 
-function StatusUpdateButton({ status }: { status: JobListingStatus }) {
+function StatusUpdateButton({
+  status,
+  id,
+}: {
+  status: JobListingStatus
+  id: string
+}) {
   const button = (
     <ActionButton
       action={toggleJobListingStatus.bind(null, id)}
@@ -107,7 +111,7 @@ function StatusUpdateButton({ status }: { status: JobListingStatus }) {
       {getNextJobListingStatus(status) === "published" ? (
         <AsyncIf
           condition={async () => {
-            const isMaxed = await hasReachedMaxFeaturedJobListings()
+            const isMaxed = await hasReachedMaxPublishedJobListings()
             return !isMaxed
           }}
           otherwise={

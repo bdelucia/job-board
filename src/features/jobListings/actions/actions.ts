@@ -14,6 +14,8 @@ import { and, eq } from "drizzle-orm"
 import { JobListingTable } from "@/drizzle/schema"
 import { cacheTag } from "next/dist/server/use-cache/cache-tag"
 import { hasOrgUserPermission } from "@/services/clerk/lib/orgUserPermissions"
+import { getNextJobListingStatus } from "../lib/utils"
+import { hasReachedMaxPublishedJobListings } from "../lib/planFeatureHelpers"
 
 export async function createJobListing(
   unsafeData: z.infer<typeof jobListingSchema>
@@ -71,7 +73,7 @@ export async function updateJobListing(
     }
   }
 
-  const jobListing = getJobListing(id, orgId)
+  const jobListing = await getJobListing(id, orgId)
   if (jobListing == null) {
     return {
       error: true,
@@ -93,10 +95,27 @@ export async function toggleJobListingStatus(id: string) {
 
   if (orgId == null) return error
 
-  const jobListing = getJobListing(id, orgId)
-  if (jobListing == null) {
+  const jobListing = await getJobListing(id, orgId)
+  if (jobListing == null) return error
+
+  const newStatus = getNextJobListingStatus(jobListing.status)
+  if (
+    !(await hasOrgUserPermission("org:job_listings:change_status")) ||
+    (newStatus === "published" && (await hasReachedMaxPublishedJobListings()))
+  ) {
     return error
   }
+
+  await updateJobListingDb(id, {
+    status: newStatus,
+    isFeatured: newStatus === "published" ? undefined : false,
+    postedAt:
+      newStatus === "published" && jobListing.postedAt === null
+        ? new Date()
+        : undefined,
+  })
+
+  return { error: false }
 }
 
 async function getJobListing(id: string, orgId: string) {

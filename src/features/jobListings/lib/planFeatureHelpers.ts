@@ -6,7 +6,7 @@ import { and, count, eq } from "drizzle-orm"
 import { db } from "@/drizzle/db"
 import { hasPlanFeature } from "@/services/clerk/lib/planFeatures"
 
-export async function hasReachedMaxFeaturedJobListings() {
+export async function hasReachedMaxPublishedJobListings() {
   const { orgId } = await getCurrentOrganization()
   if (orgId == null) return true
 
