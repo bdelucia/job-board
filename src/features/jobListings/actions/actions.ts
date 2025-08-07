@@ -15,7 +15,10 @@ import { JobListingTable } from "@/drizzle/schema"
 import { cacheTag } from "next/dist/server/use-cache/cache-tag"
 import { hasOrgUserPermission } from "@/services/clerk/lib/orgUserPermissions"
 import { getNextJobListingStatus } from "../lib/utils"
-import { hasReachedMaxPublishedJobListings } from "../lib/planFeatureHelpers"
+import {
+  hasReachedMaxFeaturedJobListings,
+  hasReachedMaxPublishedJobListings,
+} from "../lib/planFeatureHelpers"
 
 export async function createJobListing(
   unsafeData: z.infer<typeof jobListingSchema>
@@ -92,7 +95,6 @@ export async function toggleJobListingStatus(id: string) {
     message: "You don't have permission to update this job listing status",
   }
   const { orgId } = await getCurrentOrganization()
-
   if (orgId == null) return error
 
   const jobListing = await getJobListing(id, orgId)
@@ -113,6 +115,33 @@ export async function toggleJobListingStatus(id: string) {
       newStatus === "published" && jobListing.postedAt === null
         ? new Date()
         : undefined,
+  })
+
+  return { error: false }
+}
+
+export async function toggleJobListingFeatured(id: string) {
+  const error = {
+    error: true,
+    message:
+      "You don't have permission to update this job listing's featured status",
+  }
+  const { orgId } = await getCurrentOrganization()
+  if (orgId == null) return error
+
+  const jobListing = await getJobListing(id, orgId)
+  if (jobListing == null) return error
+
+  const newFeaturedStatus = !jobListing.isFeatured
+  if (
+    !(await hasOrgUserPermission("org:job_listings:change_status")) ||
+    (newFeaturedStatus === true && (await hasReachedMaxFeaturedJobListings()))
+  ) {
+    return error
+  }
+
+  await updateJobListingDb(id, {
+    isFeatured: newFeaturedStatus,
   })
 
   return { error: false }
