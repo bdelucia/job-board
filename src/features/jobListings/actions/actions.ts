@@ -7,6 +7,7 @@ import { redirect } from "next/navigation"
 import {
   insertJobListing,
   updateJobListing as updateJobListingDb,
+  deleteJobListing as deleteJobListingDb,
 } from "../db/jobListings"
 import { getJobListingIdTag } from "../db/cache/jobListings"
 import { db } from "@/drizzle/db"
@@ -145,6 +146,26 @@ export async function toggleJobListingFeatured(id: string) {
   })
 
   return { error: false }
+}
+
+export async function deleteJobListing(id: string) {
+  const error = {
+    error: true,
+    message: "You don't have permission to delete this job listing",
+  }
+  const { orgId } = await getCurrentOrganization()
+  if (orgId == null) return error
+
+  const jobListing = await getJobListing(id, orgId)
+  if (jobListing == null) return error
+
+  if (!(await hasOrgUserPermission("org:job_listings:delete"))) {
+    return error
+  }
+
+  await deleteJobListingDb(id)
+
+  redirect("/employer")
 }
 
 async function getJobListing(id: string, orgId: string) {
