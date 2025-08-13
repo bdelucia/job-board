@@ -1,6 +1,7 @@
 import { AppSidebar } from "@/components/sidebar/AppSidebar"
 import { SidebarNavMenuGroup } from "@/components/sidebar/SidebarNavMenuGroup"
 import { SidebarUserButton } from "@/features/users/components/SidebarUserButton"
+import { UploadThingSSR } from "@/services/uploadthing/components/UploadThingSSR"
 import {
   BrainCircuitIcon,
   ClipboardListIcon,
@@ -8,6 +9,7 @@ import {
   LogInIcon,
 } from "lucide-react"
 import { ReactNode } from "react"
+import { Toaster } from "sonner"
 
 export default function JobSeekerLayout({
   children,
@@ -49,6 +51,8 @@ export default function JobSeekerLayout({
       footerButton={<SidebarUserButton />}
     >
       {children}
+      <Toaster />
+      <UploadThingSSR />
     </AppSidebar>
   )
 }

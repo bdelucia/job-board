@@ -1,5 +1,5 @@
-import { createEnv } from "@t3-oss/env-nextjs";
-import { z } from "zod";
+import { createEnv } from "@t3-oss/env-nextjs"
+import { z } from "zod"
 
 // This file defines the environment variables for the server-side configuration
 export const env = createEnv({
@@ -11,16 +11,17 @@ export const env = createEnv({
     DB_NAME: z.string().min(1),
     CLERK_SECRET_KEY: z.string().min(1),
     CLERK_WEBHOOK_SECRET: z.string().min(1),
+    UPLOADTHING_TOKEN: z.string().min(1),
   },
   createFinalSchema: (env) => {
     return z.object(env).transform((val) => {
-      const { DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT, DB_USER, ...rest } = val;
+      const { DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT, DB_USER, ...rest } = val
       return {
         ...rest,
         DATABASE_URL: `postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`,
-      };
-    });
+      }
+    })
   },
   emptyStringAsUndefined: true,
   experimental__runtimeEnv: process.env,
-});
+})
