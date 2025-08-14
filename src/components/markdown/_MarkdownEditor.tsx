@@ -21,8 +21,7 @@ import {
 } from "@mdxeditor/editor"
 import { Ref } from "react"
 
-export const markdownClassNames =
-  "max-w-none prose prose-neutral dark:prose-invert font-sans"
+export const markdownClassNames = "max-w-none prose prose-neutral font-sans"
 
 export default function InternalMarkdownEditor({
   ref,

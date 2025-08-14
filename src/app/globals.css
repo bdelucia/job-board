@@ -7,7 +7,7 @@
 @plugin "@tailwindcss/typography";
 
 @custom-variant dark {
-  @media (prefers-color-schema: dark) {
+  @media (prefers-color-scheme: dark) {
     & {
       @slot;
     }
