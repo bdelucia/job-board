@@ -27,7 +27,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { useForm } from "react-hook-form"
-import z from "zod"
+import { z } from "zod"
 import {
   formatExperienceLevel,
   formatJobType,
@@ -56,7 +56,7 @@ export function JobListingFilterForm() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
-  const { setOpenMobile } = useSidebar()
+  const { setOpenMobile, state } = useSidebar()
 
   const form = useForm({
     resolver: zodResolver(jobListingFilterSchema),
@@ -94,6 +94,8 @@ export function JobListingFilterForm() {
     router.push(`${pathname}?${newParams.toString()}`)
     setOpenMobile(false)
   }
+
+  if (state === "collapsed") return null
 
   return (
     <Form {...form}>
