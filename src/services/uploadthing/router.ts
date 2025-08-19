@@ -47,7 +47,6 @@ export const customFileRouter = {
         await uploadthing.deleteFiles(resumeFileKey)
       }
 
-      // TODO:
       await inngest.send({ name: "app/resume.uploaded", user: { id: userId } })
 
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback

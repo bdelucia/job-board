@@ -1,6 +1,5 @@
 import { createEnv } from "@t3-oss/env-nextjs"
 import { z } from "zod"
-
 // This file defines the environment variables for the server-side configuration
 export const env = createEnv({
   server: {
@@ -13,6 +12,7 @@ export const env = createEnv({
     CLERK_WEBHOOK_SECRET: z.string().min(1),
     UPLOADTHING_TOKEN: z.string().min(1),
     ANTHROPIC_API_KEY: z.string().min(1),
+    OPENAI_API_KEY: z.string().min(1),
   },
   createFinalSchema: (env) => {
     return z.object(env).transform((val) => {
