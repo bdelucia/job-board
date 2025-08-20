@@ -1,8 +1,10 @@
 import { inngest } from "@/services/inngest/client"
 import {
   clerkCreateOrganization,
+  clerkCreateOrgMembership,
   clerkCreateUser,
   clerkDeleteOrganization,
+  clerkDeleteOrgMembership,
   clerkDeleteUser,
   clerkUpdateOrganization,
   clerkUpdateUser,
@@ -25,6 +27,8 @@ export const { GET, POST, PUT } = serve({
     clerkCreateOrganization,
     clerkUpdateOrganization,
     clerkDeleteOrganization,
+    clerkCreateOrgMembership,
+    clerkDeleteOrgMembership,
     createAiSummaryOfUploadedResume,
     rankApplication,
     prepareDailyUserJobListingNotifications,
