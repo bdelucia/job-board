@@ -12,3 +12,20 @@ export async function insertUserNotificationSettings(
 
   revalidateUserNotificationSettingsCache(settings.userId)
 }
+
+export async function updateUserNotificationSettings(
+  userId: string,
+  settings: Partial<
+    Omit<typeof UserNotificationsSettingsTable.$inferInsert, "userId">
+  >
+) {
+  await db
+    .insert(UserNotificationsSettingsTable)
+    .values({ ...settings, userId })
+    .onConflictDoUpdate({
+      target: UserNotificationsSettingsTable.userId,
+      set: settings,
+    })
+
+  revalidateUserNotificationSettingsCache(userId)
+}

@@ -1,5 +1,5 @@
-import UserSettingsSidebar from "@/app/(job-seeker)/_shared/UserSettingsSidebar"
+import { UserSettingsSidebar } from "@/app/(job-seeker)/_shared/UserSettingsSidebar"
 
-export default function UserResumtSidebar() {
+export default function UserResumeSidebar() {
   return <UserSettingsSidebar />
 }

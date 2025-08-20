@@ -1,7 +1,7 @@
 import { SidebarNavMenuGroup } from "@/components/sidebar/SidebarNavMenuGroup"
 import { BellIcon, FileUserIcon } from "lucide-react"
 
-export default function UserSettingsSidebar() {
+export function UserSettingsSidebar() {
   return (
     <SidebarNavMenuGroup
       items={[
