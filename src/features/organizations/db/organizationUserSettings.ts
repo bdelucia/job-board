@@ -1,7 +1,7 @@
 import { db } from "@/drizzle/db"
 import { OrganizationUserSettingsTable } from "@/drizzle/schema"
-import { and, eq } from "drizzle-orm"
 import { revalidateOrganizationUserSettingsCache } from "./cache/organizationUserSettings"
+import { and, eq } from "drizzle-orm"
 
 export async function insertOrganizationUserSettings(
   settings: typeof OrganizationUserSettingsTable.$inferInsert

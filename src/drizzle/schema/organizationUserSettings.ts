@@ -1,8 +1,14 @@
-import { boolean, integer, pgTable, varchar } from "drizzle-orm/pg-core";
-import { createdAt, updatedAt } from "../schemaHelpers";
-import { OrganizationTable } from "./organizations";
-import { UserTable } from "./user";
-import { relations } from "drizzle-orm";
+import {
+  boolean,
+  integer,
+  pgTable,
+  primaryKey,
+  varchar,
+} from "drizzle-orm/pg-core"
+import { createdAt, updatedAt } from "../schemaHelpers"
+import { UserTable } from "./user"
+import { relations } from "drizzle-orm"
+import { OrganizationTable } from "./organizations"
 
 export const OrganizationUserSettingsTable = pgTable(
   "organization_user_settings",
@@ -17,8 +23,9 @@ export const OrganizationUserSettingsTable = pgTable(
     minimumRating: integer(),
     createdAt,
     updatedAt,
-  }
-);
+  },
+  (table) => [primaryKey({ columns: [table.userId, table.organizationId] })]
+)
 
 export const organizationUserSettingsRelations = relations(
   OrganizationUserSettingsTable,
@@ -32,4 +39,4 @@ export const organizationUserSettingsRelations = relations(
       references: [OrganizationTable.id],
     }),
   })
-);
+)
