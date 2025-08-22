@@ -139,7 +139,7 @@ export const clerkCreateOrganization = inngest.createFunction(
     // })
 
     await step.run("create-organization", async () => {
-      const orgData = event.data
+      const orgData = event.data.data
 
       await insertOrganization({
         id: orgData.id,
