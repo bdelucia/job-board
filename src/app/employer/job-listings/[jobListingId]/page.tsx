@@ -38,6 +38,7 @@ import { getUserResumeIdTag } from "@/features/users/db/cache/userResumes"
 import { getUserIdTag } from "@/features/users/db/cache/users"
 import { getCurrentOrganization } from "@/services/clerk/lib/getCurrentAuth"
 import { hasOrgUserPermission } from "@/services/clerk/lib/orgUserPermissions"
+import { Action } from "@mdxeditor/editor"
 import { and, eq } from "drizzle-orm"
 import {
   EditIcon,
@@ -84,13 +85,14 @@ async function SuspendedPage({ params }: Props) {
             <JobListingBadges jobListing={jobListing} />
           </div>
         </div>
-        <div className="flex items-center gap-2 empty:-mt:4">
+        <div className="flex items-center gap-2 empty:-mt-4">
           <AsyncIf
             condition={() => hasOrgUserPermission("org:job_listings:update")}
           >
             <Button asChild variant="outline">
               <Link href={`/employer/job-listings/${jobListing.id}/edit`}>
-                <EditIcon className="size-4" /> Edit
+                <EditIcon className="size-4" />
+                Edit
               </Link>
             </Button>
           </AsyncIf>
@@ -107,6 +109,7 @@ async function SuspendedPage({ params }: Props) {
             <ActionButton
               variant="destructive"
               action={deleteJobListing.bind(null, jobListing.id)}
+              requireAreYouSure
             >
               <Trash2Icon className="size-4" />
               Delete
@@ -119,7 +122,7 @@ async function SuspendedPage({ params }: Props) {
         dialogMarkdown={<MarkdownRenderer source={jobListing.description} />}
         mainMarkdown={
           <MarkdownRenderer
-            className="prose-small"
+            className="prose-sm"
             source={jobListing.description}
           />
         }
@@ -272,14 +275,16 @@ function featuredToggleButtonText(isFeatured: boolean) {
   if (isFeatured) {
     return (
       <>
-        <StarOffIcon className="size-4" /> Un-feature
+        <StarOffIcon className="size-4" />
+        UnFeature
       </>
     )
   }
 
   return (
     <>
-      <StarIcon className="size-4" /> Feature
+      <StarIcon className="size-4" />
+      Feature
     </>
   )
 }
@@ -289,7 +294,23 @@ async function Applications({ jobListingId }: { jobListingId: string }) {
 
   return (
     <ApplicationTable
-      applications={applications}
+      applications={applications.map((a) => ({
+        ...a,
+        user: {
+          ...a.user,
+          resume: a.user.resume
+            ? {
+                ...a.user.resume,
+                markdownSummary: a.user.resume.aiSummary ? (
+                  <MarkdownRenderer source={a.user.resume.aiSummary} />
+                ) : null,
+              }
+            : null,
+        },
+        coverLetterMarkdown: a.coverLetter ? (
+          <MarkdownRenderer source={a.coverLetter} />
+        ) : null,
+      }))}
       canUpdateRating={await hasOrgUserPermission(
         "org:job_listing_applications:change_rating"
       )}
@@ -298,18 +319,6 @@ async function Applications({ jobListingId }: { jobListingId: string }) {
       )}
     />
   )
-}
-
-async function getJobListing(id: string, orgId: string) {
-  "use cache"
-  cacheTag(getJobListingIdTag(id))
-
-  return db.query.JobListingTable.findFirst({
-    where: and(
-      eq(JobListingTable.id, id),
-      eq(JobListingTable.organizationId, orgId)
-    ),
-  })
 }
 
 async function getJobListingApplications(jobListingId: string) {
@@ -330,7 +339,7 @@ async function getJobListingApplications(jobListingId: string) {
         columns: {
           id: true,
           name: true,
-          email: true,
+          imageUrl: true,
         },
         with: {
           resume: {
@@ -350,4 +359,16 @@ async function getJobListingApplications(jobListingId: string) {
   })
 
   return data
+}
+
+async function getJobListing(id: string, orgId: string) {
+  "use cache"
+  cacheTag(getJobListingIdTag(id))
+
+  return db.query.JobListingTable.findFirst({
+    where: and(
+      eq(JobListingTable.id, id),
+      eq(JobListingTable.organizationId, orgId)
+    ),
+  })
 }
