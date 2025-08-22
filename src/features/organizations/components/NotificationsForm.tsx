@@ -26,7 +26,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { RatingIcons } from "@/features/jobListingsApplications/components/RatingIcons"
-import { RATING_OPTIONS } from "@/features/jobListingsApplications/data/constant"
+import { RATING_OPTIONS } from "@/features/jobListingsApplications/data/constants"
 import { updateOrganizationUserSettings } from "../actions/organizationUserSettingActions"
 
 const ANY_VALUE = "any"

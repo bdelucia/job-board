@@ -15,15 +15,6 @@ export async function getCurrentUser({ allData = false } = {}) {
   }
 }
 
-async function getUser(id: string) {
-  "use cache"
-  cacheTag(getUserIdTag(id))
-
-  return db.query.UserTable.findFirst({
-    where: eq(UserTable.id, id),
-  })
-}
-
 export async function getCurrentOrganization({ allData = false } = {}) {
   const { orgId } = await auth()
 
@@ -32,6 +23,15 @@ export async function getCurrentOrganization({ allData = false } = {}) {
     organization:
       allData && orgId != null ? await getOrganization(orgId) : undefined,
   }
+}
+
+async function getUser(id: string) {
+  "use cache"
+  cacheTag(getUserIdTag(id))
+
+  return db.query.UserTable.findFirst({
+    where: eq(UserTable.id, id),
+  })
 }
 
 async function getOrganization(id: string) {
