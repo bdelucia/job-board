@@ -27,7 +27,7 @@ function verifyWebhook({
 export const clerkCreateUser = inngest.createFunction(
   { id: "clerk/create-db-user", name: "Clerk - Create DB User" },
   {
-    event: "clerk/user.created",
+    event: "webhook-integration/user.created",
   },
   async ({ event, step }) => {
     // await step.run("verify-webhook", async () => {
