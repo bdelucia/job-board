@@ -13,6 +13,7 @@ import {
   deleteOrganizationUserSettings,
   insertOrganizationUserSettings,
 } from "@/features/organizations/db/organizationUserSettings"
+import { UserJSON } from "@clerk/nextjs/server"
 
 function verifyWebhook({
   raw,
@@ -39,7 +40,7 @@ export const clerkCreateUser = inngest.createFunction(
     // })
 
     const userId = await step.run("create-user", async () => {
-      const userData = event.data
+      const userData = event.data as unknown as UserJSON
       const email = userData.email_addresses.find(
         (email) => email.id === userData.primary_email_address_id
       )
