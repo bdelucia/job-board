@@ -39,7 +39,7 @@ export const clerkCreateUser = inngest.createFunction(
     // })
 
     const userId = await step.run("create-user", async () => {
-      const userData = event.data.data
+      const userData = event.data
       const email = userData.email_addresses.find(
         (email) => email.id === userData.primary_email_address_id
       )
