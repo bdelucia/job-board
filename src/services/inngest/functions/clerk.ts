@@ -13,7 +13,12 @@ import {
   deleteOrganizationUserSettings,
   insertOrganizationUserSettings,
 } from "@/features/organizations/db/organizationUserSettings"
-import { UserJSON } from "@clerk/nextjs/server"
+import {
+  DeletedObjectJSON,
+  OrganizationJSON,
+  OrganizationMembershipJSON,
+  UserJSON,
+} from "@clerk/nextjs/server"
 
 function verifyWebhook({
   raw,
@@ -80,7 +85,7 @@ export const clerkUpdateUser = inngest.createFunction(
     // })
 
     await step.run("update-user", async () => {
-      const userData = event.data.data
+      const userData = event.data as unknown as UserJSON
       const email = userData.email_addresses.find(
         (email) => email.id === userData.primary_email_address_id
       )
@@ -112,7 +117,9 @@ export const clerkDeleteUser = inngest.createFunction(
     // })
 
     await step.run("delete-user", async () => {
-      const { id } = event.data.data
+      const deletedUser = event.data as unknown as DeletedObjectJSON
+
+      const { id } = deletedUser
 
       if (id == null) {
         throw new NonRetriableError("No id found")
@@ -140,7 +147,7 @@ export const clerkCreateOrganization = inngest.createFunction(
     // })
 
     await step.run("create-organization", async () => {
-      const orgData = event.data.data
+      const orgData = event.data as unknown as OrganizationJSON
 
       await insertOrganization({
         id: orgData.id,
@@ -169,7 +176,7 @@ export const clerkUpdateOrganization = inngest.createFunction(
     })
 
     await step.run("update-organization", async () => {
-      const orgData = event.data.data
+      const orgData = event.data as unknown as OrganizationJSON
 
       await updateOrganization(orgData.id, {
         name: orgData.name,
@@ -196,7 +203,7 @@ export const clerkDeleteOrganization = inngest.createFunction(
     // })
 
     await step.run("delete-organization", async () => {
-      const { id } = event.data.data
+      const { id } = event.data as unknown as DeletedObjectJSON
 
       if (id == null) {
         throw new NonRetriableError("No id found")
@@ -224,8 +231,10 @@ export const clerkCreateOrgMembership = inngest.createFunction(
     // })
 
     await step.run("create-organization-user-settings", async () => {
-      const userId = event.data.data.public_user_data.user_id
-      const orgId = event.data.data.organization.id
+      const membership = event.data as unknown as OrganizationMembershipJSON
+
+      const userId = membership.public_user_data.user_id
+      const orgId = membership.organization.id
 
       await insertOrganizationUserSettings({
         userId,
@@ -253,8 +262,10 @@ export const clerkDeleteOrgMembership = inngest.createFunction(
     // })
 
     await step.run("delete-organization-user-settings", async () => {
-      const userId = event.data.data.public_user_data.user_id
-      const orgId = event.data.data.organization.id
+      const membership = event.data as unknown as OrganizationMembershipJSON
+
+      const userId = membership.public_user_data.user_id
+      const orgId = membership.organization.id
 
       await deleteOrganizationUserSettings({
         userId,
