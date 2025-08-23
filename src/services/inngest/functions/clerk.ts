@@ -167,13 +167,13 @@ export const clerkUpdateOrganization = inngest.createFunction(
   },
   { event: "webhook-integration/organization.updated" },
   async ({ event, step }) => {
-    await step.run("verify-webhook", async () => {
-      try {
-        verifyWebhook(event.data)
-      } catch {
-        throw new NonRetriableError("Invalid webhook")
-      }
-    })
+    // await step.run("verify-webhook", async () => {
+    //   try {
+    //     verifyWebhook(event.data)
+    //   } catch {
+    //     throw new NonRetriableError("Invalid webhook")
+    //   }
+    // })
 
     await step.run("update-organization", async () => {
       const orgData = event.data as unknown as OrganizationJSON
