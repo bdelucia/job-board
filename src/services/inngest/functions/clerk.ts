@@ -69,7 +69,7 @@ export const clerkCreateUser = inngest.createFunction(
 
 export const clerkUpdateUser = inngest.createFunction(
   { id: "clerk/update-db-user", name: "Clerk - Update DB User" },
-  { event: "clerk/user.updated" },
+  { event: "webhook-integration/user.updated" },
   async ({ event, step }) => {
     // await step.run("verify-webhook", async () => {
     //   try {
@@ -101,7 +101,7 @@ export const clerkUpdateUser = inngest.createFunction(
 
 export const clerkDeleteUser = inngest.createFunction(
   { id: "clerk/delete-db-user", name: "Clerk - Delete DB User" },
-  { event: "clerk/user.deleted" },
+  { event: "webhook-integration/user.deleted" },
   async ({ event, step }) => {
     // await step.run("verify-webhook", async () => {
     //   try {
@@ -128,7 +128,7 @@ export const clerkCreateOrganization = inngest.createFunction(
     name: "Clerk - Create DB Organization",
   },
   {
-    event: "clerk/organization.created",
+    event: "webhook-integration/organization.created",
   },
   async ({ event, step }) => {
     // await step.run("verify-webhook", async () => {
@@ -158,7 +158,7 @@ export const clerkUpdateOrganization = inngest.createFunction(
     id: "clerk/update-db-organization",
     name: "Clerk - Update DB Organization",
   },
-  { event: "clerk/organization.updated" },
+  { event: "webhook-integration/organization.updated" },
   async ({ event, step }) => {
     await step.run("verify-webhook", async () => {
       try {
@@ -185,7 +185,7 @@ export const clerkDeleteOrganization = inngest.createFunction(
     id: "clerk/delete-db-organization",
     name: "Clerk - Delete DB Organization",
   },
-  { event: "clerk/organization.deleted" },
+  { event: "webhook-integration/organization.deleted" },
   async ({ event, step }) => {
     // await step.run("verify-webhook", async () => {
     //   try {
@@ -212,7 +212,7 @@ export const clerkCreateOrgMembership = inngest.createFunction(
     name: "Clerk - Create Organization User Settings",
   },
   {
-    event: "clerk/organizationMembership.created",
+    event: "webhook-integration/organizationMembership.created",
   },
   async ({ event, step }) => {
     // await step.run("verify-webhook", async () => {
@@ -241,7 +241,7 @@ export const clerkDeleteOrgMembership = inngest.createFunction(
     name: "Clerk - Delete Organization User Settings",
   },
   {
-    event: "clerk/organizationMembership.deleted",
+    event: "webhook-integration/organizationMembership.deleted",
   },
   async ({ event, step }) => {
     // await step.run("verify-webhook", async () => {

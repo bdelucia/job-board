@@ -17,13 +17,13 @@ type ClerkWebhookData<T> = {
 
 type Events = {
   "webhook-integration/user.created": ClerkWebhookData<UserJSON>
-  "clerk/user.updated": ClerkWebhookData<UserJSON>
-  "clerk/user.deleted": ClerkWebhookData<DeletedObjectJSON>
-  "clerk/organization.created": ClerkWebhookData<OrganizationJSON>
-  "clerk/organization.updated": ClerkWebhookData<OrganizationJSON>
-  "clerk/organization.deleted": ClerkWebhookData<DeletedObjectJSON>
-  "clerk/organizationMembership.created": ClerkWebhookData<OrganizationMembershipJSON>
-  "clerk/organizationMembership.deleted": ClerkWebhookData<OrganizationMembershipJSON>
+  "webhook-integration/user.updated": ClerkWebhookData<UserJSON>
+  "webhook-integration/user.deleted": ClerkWebhookData<DeletedObjectJSON>
+  "webhook-integration/organization.created": ClerkWebhookData<OrganizationJSON>
+  "webhook-integration/organization.updated": ClerkWebhookData<OrganizationJSON>
+  "webhook-integration/organization.deleted": ClerkWebhookData<DeletedObjectJSON>
+  "webhook-integration/organizationMembership.created": ClerkWebhookData<OrganizationMembershipJSON>
+  "webhook-integration/organizationMembership.deleted": ClerkWebhookData<OrganizationMembershipJSON>
   "app/jobListingApplication.created": {
     data: {
       jobListingId: string
