@@ -11,6 +11,8 @@ import {
 import { AppSidebarClient } from "./_AppSidebarClient"
 import { SignedIn } from "@/services/clerk/components/SignInStatus"
 import { ReactNode } from "react"
+import { Button } from "../ui/button"
+import Link from "next/link"
 
 export function AppSidebar({
   content,
@@ -27,7 +29,13 @@ export function AppSidebar({
         <Sidebar collapsible="icon" className="overflow-hidden">
           <SidebarHeader className="flex-row">
             <SidebarTrigger />
-            <span className="text-xl text-nowrap">Jobs by Bob</span>
+            <Button
+              variant="link"
+              className="text-xl font-bold text-nowrap border"
+              asChild
+            >
+              <Link href="/">Jobs By Bob</Link>
+            </Button>
           </SidebarHeader>
           <SidebarContent>{content}</SidebarContent>
           <SignedIn>
